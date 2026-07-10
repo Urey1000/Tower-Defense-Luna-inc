@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About - Luna-Inc Tower Defense</title>
+    
+    <!-- Optimasi pemuatan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================================
+           ANIMASI
+        ========================================= */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================
+           STYLE KHUSUS HALAMAN ABOUT
+        ========================================= */
+        .about-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Menggunakan min-height lebih aman untuk layar kecil */
+            padding: 20px;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Desain kotak panel informasi ala Game RPG/Tower Defense */
+        .about-box {
+            background: rgba(16, 28, 43, 0.7);
+            border: 4px solid #4facfe;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 450px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(79, 172, 254, 0.3);
+            backdrop-filter: blur(8px);
+            margin-bottom: 25px;
+            margin-top: -10px;
+        }
+
+        .about-box p {
+            font-family: sans-serif;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #dcdde1;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px #000;
+        }
+
+        .about-box .highlight {
+            color: #ffcc00;
+            font-family: 'Lilita One', cursive, sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 1px;
+            -webkit-text-stroke: 0.5px #b8860b;
+        }
+
+        .dev-info {
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 2px dashed rgba(255, 255, 255, 0.2);
+        }
+        
+        .dev-info p {
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="about-container">
+        <header class="menu-header">
+            <h1 class="title" style="font-size: 3rem;">ABOUT GAME</h1>
+        </header>
+
+        <section class="about-box">
+            <p>Selamat datang di <span class="highlight">Luna-Inc Tower Defense!</span></p>
+            <p>Pertahankan wilayah kerajaan dari serangan musuh tanpa akhir. Bangun menara, tingkatkan kekuatan, dan susun strategi terbaik untuk bertahan dari setiap gelombang (Wave).</p>
+            
+            <div class="dev-info">
+                <p>Developer: <span class="highlight">Ray Nurberian</span></p>
+                <p>Studio: <span class="highlight">www.luna-inc.my.id</span></p>
+                <p>Version: <span class="highlight">1.1.0</span></p>
+            </div>
+        </section>
+
+        <div style="width: 100%; max-width: 300px;">
+            <button id="backToMenuBtn" class="btn-3d btn-back">⬅ KEMBALI</button>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const backBtn = document.getElementById("backToMenuBtn");
+            
+            if (backBtn) {
+                backBtn.addEventListener("click", () => {
+                    // Beri jeda 0.2 detik agar animasi klik tombol 3D terlihat sebelum pindah halaman
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 200);
+                });
+            }
+        });
+    </script>
+    <script src="audio-manager.js"></script>
+</body>
+</html>

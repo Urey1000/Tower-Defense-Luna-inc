@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Luna-Inc Tower Defense</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <section id="mainMenu" class="screen">
+            <div class="menu-header">
+                <h2 class="studio">LUNA-INC</h2>
+                <h1 class="title">TOWER DEFENSE</h1>
+            </div>
+            <div class="menu-buttons">
+                <button id="playBtn" class="btn-3d btn-primary">▶ PLAY</button>
+                <button id="settingBtn" class="btn-3d btn-secondary">⚙ SETTINGS</button>
+                <button id="aboutBtn" class="btn-3d btn-secondary">📖 ABOUT</button>
+            </div>
+        </section>
+
+        <section id="modeMenu" class="screen hide">
+            <div class="menu-header">
+                <h2 class="subtitle">Select Difficulty</h2>
+            </div>
+            <div class="menu-buttons">
+                <button class="difficulty-btn btn-3d btn-easy" data-mode="easy">🟢 EASY</button>
+                <button class="difficulty-btn btn-3d btn-normal" data-mode="normal">🟡 NORMAL</button>
+                <button class="difficulty-btn btn-3d btn-hard" data-mode="hard">🔴 HARD</button>
+                <button id="backBtn" class="btn-3d btn-back">⬅ BACK</button>
+            </div>
+        </section>
+    </div> 
+
+    <script src="menu.js"></script>
+    <script src="audio-manager.js"></script>
+</body>
+</html>

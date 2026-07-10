@@ -1,0 +1,65 @@
+<!DOCTYPE html>  
+<html lang="id">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width,initial-scale=1">  
+    <title>Loading...</title>  
+      
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">  
+    
+    <link rel="stylesheet" href="loading.css">
+</head>  
+  
+<body>  
+    <div class="loadingBox">  
+        <h1>LUNA-INC</h1>  
+        <h2>TOWER DEFENSE</h2>  
+        <p id="loadingText">Loading...</p>  
+          
+        <div class="bar">  
+            <div id="progress" style="width: 0%;"></div>  
+        </div>  
+          
+        <p id="percent">0%</p>  
+        <p id="tips" style="display: none;"></p>  
+    </div>  
+  
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const progressBar = document.getElementById("progress");
+            const percentText = document.getElementById("percent");
+            const loadingText = document.getElementById("loadingText");
+            
+            let progress = 0;
+            const texts = ["Membangun Tower...", "Memanggil Musuh...", "Menyiapkan Arena..."];
+            let textIndex = 0;
+
+            const interval = setInterval(() => {
+                // Naikkan persentase secara acak antara 5 sampai 15
+                progress += Math.floor(Math.random() * 10) + 5; 
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    loadingText.innerText = "Selesai!";
+                    progressBar.style.width = "100%";
+                    percentText.innerText = "100%";
+                    
+                    // Jika sudah 100%, pindah ke layar permainan utama!
+                    setTimeout(() => {
+                        window.location.href = "game.html";
+                    }, 500);
+                } else {
+                    // Ganti-ganti teks lucu saat loading
+                    if (progress % 30 < 10) {
+                        loadingText.innerText = texts[textIndex % texts.length];
+                        textIndex++;
+                    }
+                    progressBar.style.width = progress + "%";
+                    percentText.innerText = progress + "%";
+                }
+            }, 300); // Kecepatan update (milidetik)
+        });
+    </script>
+</body>  
+</html>

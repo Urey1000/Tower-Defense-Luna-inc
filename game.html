@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tower Defense: Desert Realm</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ==========================================
+           1. RESET & BODY STYLING
+           ========================================== */
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            font-family: 'Fredoka One', cursive, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #2b3a42;
+            background-image: linear-gradient(45deg, #1f2b31 25%, transparent 25%, transparent 75%, #1f2b31 75%, #1f2b31), 
+                              linear-gradient(45deg, #1f2b31 25%, transparent 25%, transparent 75%, #1f2b31 75%, #1f2b31);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        /* ==========================================
+           2. CONTAINER UTAMA
+           ========================================== */
+        #game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 1080px;
+            box-shadow: 0px 20px 50px rgba(0,0,0,0.8);
+            border-radius: 20px;
+            overflow: hidden;
+            background-color: #e0c9a3;
+            position: relative;
+        }
+
+        /* ==========================================
+           3. HUD (HEADER)
+           ========================================== */
+        #hud {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(to bottom, #443425, #291d13);
+            border-bottom: 5px solid #140d07;
+        }
+
+        .hud-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 20px;
+            border: 3px solid #fff;
+            box-shadow: 0 5px 0 rgba(0,0,0,0.4), inset 0 3px 0 rgba(255,255,255,0.4);
+            letter-spacing: 1px;
+        }
+
+        .hp { background: linear-gradient(to bottom, #ff4b4b, #b31616); border-color: #4a0000; }
+        .gold { background: linear-gradient(to bottom, #ffd700, #b8860b); border-color: #634300; }
+        .wave { background: linear-gradient(to bottom, #4bacff, #116bb3); border-color: #002c52; }
+        .pause { 
+            background: linear-gradient(to bottom, #9d9d9d, #5a5a5a); 
+            border-color: #2b2b2b; 
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .pause:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(0,0,0,0.4); }
+
+        /* ==========================================
+           4. GAME CANVAS
+           ========================================== */
+        #gameCanvas {
+            background-color: #e0c9a3;
+            width: 100%;
+            max-width: 1080px;
+            aspect-ratio: 1080 / 1440;
+            display: block;
+            cursor: crosshair;
+        }
+
+        /* ==========================================
+           5. TOWER BAR (FOOTER)
+           ========================================== */
+        #towerBar {
+            display: flex;
+            justify-content: space-evenly;
+            gap: 5px; 
+            flex-wrap: nowrap; 
+            width: 100%;
+            padding: 15px 10px;
+            background: linear-gradient(to top, #443425, #291d13);
+            border-top: 5px solid #140d07;
+        }
+
+        .tower-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1; 
+            max-width: 90px;
+            height: 90px;
+            border-radius: 12px;
+            font-size: 14px;
+            cursor: pointer;
+            border: 3px solid #140d07;
+            box-shadow: 0 6px 0 #140d07, inset 0 3px 0 rgba(255,255,255,0.4);
+            transition: all 0.1s ease;
+        }
+
+        .tower-btn span.icon { font-size: 30px; margin-bottom: 5px; text-shadow: none; }
+
+        .btn-panah { background: linear-gradient(to bottom, #74c365, #2e8b57); }
+        .btn-cannon { background: linear-gradient(to bottom, #8e9eab, #4e545c); }
+        .btn-ice { background: linear-gradient(to bottom, #87cefa, #4682b4); }
+        .btn-lightning { background: linear-gradient(to bottom, #ffee55, #cca300); }
+        .btn-poison { background: linear-gradient(to bottom, #a3e12e, #438a05); }
+        .btn-magic { background: linear-gradient(to bottom, #d387fa, #8a2be2); }
+
+        .tower-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 0px 0 #140d07, inset 0 3px 0 rgba(255,255,255,0.4);
+        }
+
+        /* ==========================================
+           6. MENU UPGRADE (POP-UP TOWER)
+           ========================================== */
+        #upgrade-menu {
+            display: none; 
+            position: absolute;
+            background: linear-gradient(to bottom, #443425, #291d13);
+            padding: 15px; 
+            border-radius: 15px; 
+            border: 4px solid #140d07;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8), inset 0 3px 0 rgba(255,255,255,0.2);
+            z-index: 100;
+            transform: translate(-50%, -100%);
+            margin-top: -20px;
+        }
+
+        #upgrade-menu::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 10px 10px 0;
+            border-style: solid;
+            border-color: #140d07 transparent transparent transparent;
+            display: block;
+            width: 0;
+        }
+
+        .menu-btn {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid #140d07;
+            color: white;
+            text-shadow: 1px 1px 0 #000;
+            transition: all 0.1s;
+        }
+
+        .btn-upgrade-action {
+            background: linear-gradient(to bottom, #ffbc00, #b8860b);
+            box-shadow: 0 4px 0 #140d07, inset 0 2px 0 rgba(255,255,255,0.4);
+        }
+        
+        .btn-close-action {
+            background: linear-gradient(to bottom, #ff4b4b, #b31616);
+            box-shadow: 0 4px 0 #140d07, inset 0 2px 0 rgba(255,255,255,0.4);
+        }
+
+        .menu-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #140d07, inset 0 2px 0 rgba(255,255,255,0.4);
+        }
+
+        /* ==========================================
+           7. MEDIA QUERIES (RESPONSIVE KHUSUS MOBILE)
+           ========================================== */
+        @media (max-width: 768px) {
+            .hud-item { font-size: 13px; padding: 5px 10px; }
+            #hud { padding: 10px; }
+            #towerBar { padding: 10px 5px; gap: 4px; }
+            
+            .tower-btn { 
+                height: 70px; 
+                font-size: 10px; 
+                border: 2px solid #140d07;
+                box-shadow: 0 4px 0 #140d07, inset 0 2px 0 rgba(255,255,255,0.4);
+                border-radius: 8px;
+            }
+            .tower-btn span.icon { font-size: 22px; margin-bottom: 2px; }
+            
+            .tower-btn:active {
+                transform: translateY(4px);
+                box-shadow: 0 0px 0 #140d07, inset 0 2px 0 rgba(255,255,255,0.4);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <header id="hud">
+            <div class="hud-item hp">❤️ <span id="hp-display">20</span></div>
+            <div class="hud-item gold">💰 <span id="gold-display">150</span></div>
+            <div class="hud-item wave">🌊 Wave <span id="wave-display">1</span></div>
+            <div class="hud-item pause" id="btn-pause">⏸ Pause</div>
+        </header>
+
+        <canvas id="gameCanvas" width="1080" height="1440"></canvas>
+
+        <footer id="towerBar">
+            <div class="tower-btn btn-panah" data-type="panah" onclick="selectTower('panah')">
+                <span class="icon">🏹</span>Panah
+            </div>
+            <div class="tower-btn btn-cannon" data-type="bomb" onclick="selectTower('bomb')">
+                <span class="icon">💣</span>Cannon
+            </div>
+            <div class="tower-btn btn-ice" data-type="ice" onclick="selectTower('ice')">
+                <span class="icon">❄️</span>Ice
+            </div>
+            <div class="tower-btn btn-lightning" data-type="lightning" onclick="selectTower('lightning')">
+                <span class="icon">⚡</span>Lightning
+            </div>
+            <div class="tower-btn btn-poison" data-type="poison" onclick="selectTower('poison')">
+                <span class="icon">🧪</span>Poison
+            </div>
+            <div class="tower-btn btn-magic" data-type="magic" onclick="selectTower('magic')">
+                <span class="icon">🔮</span>Magic
+            </div>
+        </footer>
+    </div>
+
+    <div id="upgrade-menu">
+        <button id="btn-upgrade" class="menu-btn btn-upgrade-action">🔼 Upgrade</button>
+        <button onclick="document.getElementById('upgrade-menu').style.display='none'" class="menu-btn btn-close-action">❌ Close</button>
+    </div>
+
+    <script>
+        // Memastikan variabel menjadi global sehingga file lain dapat membaca "window.currentMode"
+        window.currentMode = localStorage.getItem("gameMode") || "normal";
+        console.log("Memulai permainan dengan tingkat kesulitan: " + window.currentMode);
+    </script>
+
+    <script src="globals.js"></script>
+    <script src="config.js"></script>
+    <script src="assets.js"></script>
+    <script src="audio-manager.js"></script>
+    <script src="effects.js"></script>
+    <script src="enemies.js"></script>
+    <script src="tower.js"></script>
+    <script src="placement.js"></script>
+    <script src="ui.js"></script>
+    <script src="main.js"></script>
+
+</body>
+</html>

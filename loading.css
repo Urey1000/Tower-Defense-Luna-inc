@@ -1,0 +1,142 @@
+/* =========================================
+   RESET & BODY STYLING
+========================================= */
+* {  
+    margin: 0;  
+    padding: 0;  
+    box-sizing: border-box;  
+}  
+  
+body {  
+    height: 100vh;  
+    display: flex;  
+    justify-content: center;  
+    align-items: center;  
+    /* Disamakan dengan style.css: Background langit malam magis */  
+    background: radial-gradient(circle at center, #294861 0%, #101c2b 100%);
+    font-family: 'Lilita One', Arial, sans-serif;  
+    color: white;  
+    overflow: hidden;  
+}  
+  
+/* =========================================
+   LOADING BOX & TYPOGRAPHY
+========================================= */
+.loadingBox {  
+    width: 90%;  
+    max-width: 450px;  
+    text-align: center;  
+    /* Adding a subtle bounce animation for that casual game feel */  
+    animation: float 3s ease-in-out infinite;  
+}  
+  
+h1 {  
+    font-size: 48px;  
+    letter-spacing: 2px;  
+    color: #ffd700; /* Vibrant Gold */  
+    /* Heavy text-shadow creates the 3D extrusion Clash Royale style */  
+    text-shadow:   
+        0px 4px 0px #b8860b,  
+        0px 8px 0px #8b6508,  
+        0px 12px 15px rgba(0,0,0,0.5);  
+    margin-bottom: 5px;  
+    -webkit-text-stroke: 1px #fff;  
+}  
+  
+h2 {  
+    font-size: 28px;  
+    color: #ffffff;  
+    text-shadow:   
+        0px 3px 0px #2c3e50,  
+        0px 6px 0px #1a252f,  
+        0px 8px 10px rgba(0,0,0,0.4);  
+    margin-bottom: 20px;  
+}  
+  
+#loadingText {  
+    font-size: 20px;  
+    color: #fff;  
+    text-shadow: 0px 2px 4px rgba(0,0,0,0.6);  
+    margin-bottom: 10px;  
+}  
+  
+/* =========================================
+   PROGRESS BAR
+========================================= */
+.bar {  
+    width: 100%;  
+    height: 40px;  
+    /* Wood-like border for the progress container */  
+    background: #2b1d14;  
+    border: 4px solid #5c3a21;  
+    border-radius: 40px;  
+    box-shadow:   
+        inset 0px 5px 10px rgba(0,0,0,0.7), /* Inner depth */  
+        0px 5px 15px rgba(0,0,0,0.3); /* Drop shadow */  
+    overflow: hidden;  
+    position: relative;  
+    margin-top: 10px;  
+}  
+  
+#progress {  
+    width: 0%;  
+    height: 100%;  
+    /* Bright, magical elixir gradient */  
+    background: linear-gradient(180deg, #5dfd00 0%, #17b300 100%);  
+    border-radius: 36px;  
+    /* Inner highlight to make it look like a rounded 3D liquid/gel */  
+    box-shadow: inset 0px 10px 10px rgba(255,255,255,0.4);  
+    transition: width 0.2s ease-out;  
+}  
+  
+#percent {  
+    margin-top: 15px;  
+    font-size: 32px;  
+    color: #fff;  
+    text-shadow:   
+        0px 3px 0px #111,  
+        0px 5px 10px rgba(0,0,0,0.5);  
+}  
+  
+/* =========================================
+   TIPS & ANIMASI
+========================================= */
+#tips {  
+    margin-top: 20px;  
+    font-size: 18px;  
+    color: #ffeba1;  
+    background: rgba(0, 0, 0, 0.4);  
+    padding: 10px 20px;  
+    border-radius: 20px;  
+    display: inline-block;  
+    border: 2px solid rgba(255,255,255,0.2);  
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    min-height: 55px; /* Disesuaikan agar layar tidak melompat jika teks kosong */
+}  
+
+/* Animasi untuk memunculkan tips */
+.pop-animation {
+    animation: popTip 0.35s ease forwards;
+}
+
+/* Keyframes untuk box yang mengambang */
+@keyframes float {  
+    0% { transform: translateY(0px); }  
+    50% { transform: translateY(-10px); }  
+    100% { transform: translateY(0px); }  
+}  
+
+/* Keyframes efek pop-up untuk tulisan tips */
+@keyframes popTip {
+    0% {
+        transform: scale(0.7);
+        opacity: 0;
+    }
+    60% {
+        transform: scale(1.15);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

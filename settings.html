@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Settings - Luna-Inc Tower Defense</title>
+    
+    <!-- Optimasi pemuatan Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lilita+One&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* =========================================
+           ANIMASI
+        ========================================= */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* =========================================
+           STYLE KHUSUS HALAMAN SETTINGS
+        ========================================= */
+        .settings-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Diubah menjadi min-height agar aman di layar kecil */
+            padding: 20px;
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Kotak Panel UI Settings */
+        .settings-box {
+            background: rgba(16, 28, 43, 0.8);
+            border: 4px solid #4facfe;
+            border-radius: 25px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.6), inset 0 0 20px rgba(79, 172, 254, 0.3);
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+            margin-top: -10px;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .setting-item label {
+            font-family: 'Lilita One', cursive, sans-serif; /* Pastikan font diterapkan ke label */
+            font-size: 1.5rem;
+            color: #ffcc00;
+            text-shadow: 0 3px 0 #b8860b, 0 5px 10px rgba(0,0,0,0.8);
+            -webkit-text-stroke: 1px #fff;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 15px;
+        }
+
+        /* Container untuk Slider dan Teks Persentase */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 15px;
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        /* =========================================
+           KUSTOMISASI SLIDER (Ala Mobile Game)
+        ========================================= */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]:focus {
+            outline: none;
+        }
+
+        /* Jalur/Track Slider */
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 15px;
+            cursor: pointer;
+            background: #101c2b;
+            border-radius: 10px;
+            border: 2px solid #4facfe;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.8);
+        }
+
+        /* Tombol Bulat (Thumb) pada Slider */
+        input[type=range]::-webkit-slider-thumb {
+            height: 30px;
+            width: 30px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #ffde00, #ff8c00);
+            border: 3px solid #7d4400;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -9px; /* Supaya thumb pas di tengah track */
+            box-shadow: 0 4px 0 #7d4400, 0 5px 10px rgba(0,0,0,0.6);
+            transition: transform 0.1s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(1.1);
+        }
+
+        /* Teks Indikator Persentase */
+        #volumeText {
+            font-family: 'Lilita One', cursive, sans-serif;
+            font-size: 1.2rem;
+            color: #fff;
+            min-width: 60px;
+            text-align: right;
+            text-shadow: 1px 1px 2px #000;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="settings-container">
+        <header class="menu-header">
+            <h1 class="title" style="font-size: 3.5rem;">SETTINGS</h1>
+        </header>
+
+        <section class="settings-box">
+            
+            <div class="setting-item">
+                <label>BGM VOLUME</label>
+                <div class="slider-container">
+                    <input type="range" id="volumeSlider" min="0" max="100" value="60">
+                    <span id="volumeText">60%</span>
+                </div>
+            </div>
+
+            <div class="setting-item">
+                <button id="muteBtn" class="btn-3d btn-primary">🔊 SOUND: ON</button>
+            </div>
+
+        </section>
+
+        <div style="width: 100%; max-width: 300px;">
+            <button id="backBtn" class="btn-3d btn-back">⬅ KEMBALI</button>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const volumeSlider = document.getElementById("volumeSlider");
+            const volumeText = document.getElementById("volumeText");
+            const muteBtn = document.getElementById("muteBtn");
+            const backBtn = document.getElementById("backBtn");
+
+            // 1. AMBIL DATA DARI MEMORI (Atau gunakan nilai default jika belum ada)
+            let currentVolume = localStorage.getItem("gameVolume") !== null ? localStorage.getItem("gameVolume") : 60;
+            let isMuted = localStorage.getItem("isMuted") === "true";
+
+            // 2. FUNGSI UPDATE TAMPILAN
+            function updateUI() {
+                if (isMuted) {
+                    volumeSlider.value = 0;
+                    volumeText.innerText = "MUTED";
+                    muteBtn.innerText = "🔇 SOUND: OFF";
+                    // Ubah warna tombol jadi Merah (btn-hard dari style.css)
+                    muteBtn.classList.remove("btn-primary");
+                    muteBtn.classList.add("btn-hard");
+                } else {
+                    volumeSlider.value = currentVolume;
+                    volumeText.innerText = currentVolume + "%";
+                    muteBtn.innerText = "🔊 SOUND: ON";
+                    // Kembalikan warna tombol jadi Kuning Emas (btn-primary)
+                    muteBtn.classList.remove("btn-hard");
+                    muteBtn.classList.add("btn-primary");
+                }
+            }
+
+            // Panggil fungsi saat halaman pertama dimuat
+            updateUI();
+
+            // 3. EVENT LISTENER SAAT SLIDER DIGESER
+            volumeSlider.addEventListener("input", (e) => {
+                let val = e.target.value;
+                
+                // Jika sedang di-mute tapi user geser slider, matikan mode mute
+                if (isMuted && val > 0) {
+                    isMuted = false;
+                    localStorage.setItem("isMuted", "false");
+                }
+
+                if (val == 0) {
+                    isMuted = true;
+                    localStorage.setItem("isMuted", "true");
+                }
+
+                if (!isMuted) {
+                    currentVolume = val;
+                    localStorage.setItem("gameVolume", currentVolume);
+                }
+                
+                updateUI();
+            });
+
+            // 4. EVENT LISTENER SAAT TOMBOL MUTE DIKLIK
+            muteBtn.addEventListener("click", () => {
+                isMuted = !isMuted; // Tukar status ON/OFF
+                localStorage.setItem("isMuted", isMuted);
+                updateUI();
+            });
+
+            // 5. TOMBOL KEMBALI
+            backBtn.addEventListener("click", () => {
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 200);
+            });
+        });
+    </script>
+    <script src="audio-manager.js"></script>
+</body>
+</html>
